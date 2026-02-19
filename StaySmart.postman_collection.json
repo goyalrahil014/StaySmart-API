@@ -1,0 +1,135 @@
+{
+  "info": {
+    "_postman_id": "staysmart-api-collection-minimal",
+    "name": "StaySmart API (Minimal)",
+    "description": "Minimal Postman collection for StaySmart hotel booking system. Only essential endpoints included.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {"key": "base_url", "value": "http://localhost:8000", "type": "string"},
+    {"key": "access_token", "value": "", "type": "string"},
+    {"key": "hotel_id", "value": "", "type": "string"},
+    {"key": "room_id", "value": "", "type": "string"}
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"userpass123\"\n}"},
+            "url": {"raw": "{{base_url}}/auth/register", "host": ["{{base_url}}"], "path": ["auth", "register"]},
+            "description": "Register a new user account"
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/x-www-form-urlencoded"}],
+            "body": {"mode": "urlencoded", "urlencoded": [
+              {"key": "username", "value": "user@example.com", "type": "text"},
+              {"key": "password", "value": "userpass123", "type": "text"}
+            ]},
+            "url": {"raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"]},
+            "description": "Login and receive JWT token"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Hotels",
+      "item": [
+        {
+          "name": "Create Hotel",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer {{access_token}}"}
+            ],
+            "body": {"mode": "raw", "raw": "{\n  \"name\": \"Grand Plaza Hotel\",\n  \"location\": \"New York, NY\"\n}"},
+            "url": {"raw": "{{base_url}}/hotels/", "host": ["{{base_url}}"], "path": ["hotels", ""]},
+            "description": "Create a new hotel (requires authentication)"
+          },
+          "response": []
+        },
+        {
+          "name": "List All Hotels",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "{{base_url}}/hotels/", "host": ["{{base_url}}"], "path": ["hotels", ""]},
+            "description": "Get list of all hotels (public endpoint)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Rooms",
+      "item": [
+        {
+          "name": "Create Room",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer {{access_token}}"}
+            ],
+            "body": {"mode": "raw", "raw": "{\n  \"number\": \"101\",\n  \"type\": \"Deluxe\",\n  \"price\": 150.00\n}"},
+            "url": {"raw": "{{base_url}}/hotels/{{hotel_id}}/rooms/", "host": ["{{base_url}}"], "path": ["hotels", "{{hotel_id}}", "rooms", ""]},
+            "description": "Create a room for a specific hotel (requires authentication)"
+          },
+          "response": []
+        },
+        {
+          "name": "List Rooms for Hotel",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {"raw": "{{base_url}}/hotels/{{hotel_id}}/rooms/", "host": ["{{base_url}}"], "path": ["hotels", "{{hotel_id}}", "rooms", ""]},
+            "description": "Get all rooms for a specific hotel (public endpoint)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Bookings",
+      "item": [
+        {
+          "name": "Create Booking",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer {{access_token}}"}
+            ],
+            "body": {"mode": "raw", "raw": "{\n  \"room_id\": {{room_id}},\n  \"from_date\": \"2026-03-01\",\n  \"to_date\": \"2026-03-05\"\n}"},
+            "url": {"raw": "{{base_url}}/bookings/", "host": ["{{base_url}}"], "path": ["bookings", ""]},
+            "description": "Create a new booking for a room (requires authentication)"
+          },
+          "response": []
+        },
+        {
+          "name": "List My Bookings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{access_token}}"}
+            ],
+            "url": {"raw": "{{base_url}}/bookings/users/me/bookings", "host": ["{{base_url}}"], "path": ["bookings", "users", "me", "bookings"]},
+            "description": "Get all bookings for the currently authenticated user"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
